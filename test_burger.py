@@ -129,7 +129,7 @@ class TestBurger:
 
 
 
-    def test_remove_ingredient_(self, burger):
+    def test_remove_ingredient_from_burger(self, burger):
         
         my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
         my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
@@ -137,7 +137,7 @@ class TestBurger:
         burger.add_ingredient(my_ingredient_1)
         burger.add_ingredient(my_ingredient_2)
 
-        burger.remove_ingredient(my_ingredient_1)
+        burger.remove_ingredient(0)
 
         assert len(burger.ingredients) == 1
 
@@ -169,6 +169,7 @@ class TestBurger:
         burger.move_ingredient(2, 0)
         
         assert burger.ingredients == [my_ingredient_3, my_ingredient_1, my_ingredient_2]
+
 
     def test_move_ingredient_ingredient_same_position(self, burger):
         
@@ -232,7 +233,7 @@ class TestBurger:
 
 
 
-
+    @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_receipt_without_ingredients(self, bun_name, bun_price, burger):
        
         my_bun = Bun(bun_name, bun_price) 
@@ -243,7 +244,7 @@ class TestBurger:
 
         assert burger.get_receipt() == expected_receipt
 
-
+    @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_receipt_with_one_ingredient(self, bun_name, bun_price, burger):
         my_bun = Bun(bun_name, bun_price) 
         burger.set_buns(my_bun)
@@ -257,7 +258,7 @@ class TestBurger:
         assert burger.get_receipt() == expected_receipt
 
 
-
+    @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_receipt_with_multiple_ingredients(self, bun_name, bun_price, burger):
 
         my_bun = Bun(bun_name, bun_price) 
@@ -274,6 +275,7 @@ class TestBurger:
         assert burger.get_receipt() == expected_receipt
 
 
+    @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_receipt_actual_price_check(self, bun_name, bun_price, burger):
 
         my_bun = Bun(bun_name, bun_price) 
