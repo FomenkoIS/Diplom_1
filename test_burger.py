@@ -114,7 +114,7 @@ class TestBurger:
         assert burger.ingredients[0].get_price() == price
 
 
-    def test_add_ingredient_add_two_ingrediets(self, burger):
+    def test_add_ingredient_add_two_ingredients(self, burger):
 
         my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
         my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
@@ -242,10 +242,12 @@ class TestBurger:
 
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_receipt_without_ingredients(self, bun_name, bun_price, burger):
-       
-        my_bun = Bun(bun_name, bun_price) 
-        burger.set_buns(my_bun)
 
+        mock_bun = Mock()
+        mock_bun.get_price.return_value = bun_price
+        mock_bun.get_name.return_value = bun_name
+        burger.set_buns(mock_bun)
+        
         expected_price = bun_price * 2
         expected_receipt = f"(==== {bun_name} ====)\n(==== {bun_name} ====)\nPrice: {expected_price}"
 
@@ -253,12 +255,19 @@ class TestBurger:
 
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_receipt_with_one_ingredient(self, bun_name, bun_price, burger):
-        my_bun = Bun(bun_name, bun_price) 
-        burger.set_buns(my_bun)
 
-        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
-        burger.add_ingredient(my_ingredient_1)
+        mock_bun = Mock()
+        mock_bun.get_price.return_value = bun_price
+        mock_bun.get_name.return_value = bun_name
+        burger.set_buns(mock_bun)
 
+
+        mock_ingredient = Mock()
+        mock_ingredient.get_type.return_value = "SAUCE"
+        mock_ingredient.get_name.return_value = "Соус Spicy-X"
+        mock_ingredient.get_price.return_value = 90        
+        burger.add_ingredient(mock_ingredient)
+        
         expected_price = bun_price * 2 + 90
         expected_receipt = f"(==== {bun_name} ====)\n= sauce Соус Spicy-X =\n(==== {bun_name} ====)\nPrice: {expected_price}"
 
@@ -268,14 +277,24 @@ class TestBurger:
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_receipt_with_multiple_ingredients(self, bun_name, bun_price, burger):
 
-        my_bun = Bun(bun_name, bun_price) 
-        burger.set_buns(my_bun)
-        
-        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
-        my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
-        burger.add_ingredient(my_ingredient_1)
-        burger.add_ingredient(my_ingredient_2)
-        
+        mock_bun = Mock()
+        mock_bun.get_price.return_value = bun_price
+        mock_bun.get_name.return_value = bun_name
+        burger.set_buns(mock_bun)
+
+        mock_ingredient_1 = Mock()
+        mock_ingredient_2 = Mock()
+        mock_ingredient_1.get_type.return_value = "SAUCE"
+        mock_ingredient_1.get_name.return_value = "Соус Spicy-X"
+        mock_ingredient_1.get_price.return_value = 90 
+
+        mock_ingredient_2.get_type.return_value = "FILLING"
+        mock_ingredient_2.get_name.return_value = "Мясо бессмертных моллюсков Protostomia"
+        mock_ingredient_2.get_price.return_value = 1337
+    
+        burger.add_ingredient(mock_ingredient_1)
+        burger.add_ingredient(mock_ingredient_2)
+
         expected_price = bun_price * 2 + 90 + 1337
         expected_receipt = f"(==== {bun_name} ====)\n= sauce Соус Spicy-X =\n= filling Мясо бессмертных моллюсков Protostomia =\n(==== {bun_name} ====)\nPrice: {expected_price}"
         
