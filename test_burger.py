@@ -182,4 +182,21 @@ class TestBurger:
             
         assert burger.ingredients == [my_ingredient_1, my_ingredient_2, my_ingredient_3]
 
+
+
+    @pytest.mark.parametrize("bun_name, bun_price", BUNS)
+    def test_get_price_price_burger_without_ingredients(self, bun_name, bun_price, burger):
+        
+        my_bun = Bun(bun_name, bun_price)
+             
+        burger.set_buns(my_bun)
+        money = burger.get_price()
+        assert burger.bun.get_price() *2 == money
+
+
+         
+    
+
+
+
     
