@@ -11,6 +11,7 @@ from ingredient_types import INGREDIENT_TYPE_FILLING
 def burger():
     return Burger()
 
+
 class TestBurger:
 
     BUNS = [
@@ -112,6 +113,7 @@ class TestBurger:
         
         assert burger.ingredients[0].get_price() == price
 
+
     def test_add_ingredient_add_two_ingrediets(self, burger):
 
         my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
@@ -187,16 +189,43 @@ class TestBurger:
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_price_price_burger_without_ingredients(self, bun_name, bun_price, burger):
         
-        my_bun = Bun(bun_name, bun_price)
-             
+        my_bun = Bun(bun_name, bun_price) 
         burger.set_buns(my_bun)
-        money = burger.get_price()
-        assert burger.bun.get_price() *2 == money
+
+        expected_price = bun_price * 2
+        actual_price = burger.get_price()
+
+        assert expected_price == actual_price
 
 
+    @pytest.mark.parametrize("bun_name, bun_price", BUNS)
+    def test_get_price_burger_with_one_ingredient(self, bun_name, bun_price, burger):
          
-    
+        my_bun = Bun(bun_name, bun_price)
+        burger.set_buns(my_bun)
+
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        burger.add_ingredient(my_ingredient_1)
 
 
+        expected_price = bun_price * 2 + 90
+        actual_price = burger.get_price()
 
-    
+        assert expected_price == actual_price
+
+
+    @pytest.mark.parametrize("bun_name, bun_price", BUNS)
+    def test_get_price_burger_with_multiple_ingredients(self, bun_name, bun_price, burger):
+
+        my_bun = Bun(bun_name, bun_price)
+        burger.set_buns(my_bun)
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
+
+        burger.add_ingredient(my_ingredient_1)
+        burger.add_ingredient(my_ingredient_2)
+
+        expected_price = bun_price * 2 + 90 + 1337
+        actual_price = burger.get_price()
+
+        assert expected_price == actual_price
