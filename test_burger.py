@@ -249,7 +249,7 @@ class TestBurger:
         burger.set_buns(mock_bun)
         
         expected_price = bun_price * 2
-        expected_receipt = f"(==== {bun_name} ====)\n(==== {bun_name} ====)\nPrice: {expected_price}"
+        expected_receipt = f"(==== {bun_name} ====)\n(==== {bun_name} ====)\n\nPrice: {expected_price}"
 
         assert burger.get_receipt() == expected_receipt
 
@@ -269,7 +269,7 @@ class TestBurger:
         burger.add_ingredient(mock_ingredient)
         
         expected_price = bun_price * 2 + 90
-        expected_receipt = f"(==== {bun_name} ====)\n= sauce Соус Spicy-X =\n(==== {bun_name} ====)\nPrice: {expected_price}"
+        expected_receipt = f"(==== {bun_name} ====)\n= sauce Соус Spicy-X =\n(==== {bun_name} ====)\n\nPrice: {expected_price}"
 
         assert burger.get_receipt() == expected_receipt
 
@@ -296,7 +296,7 @@ class TestBurger:
         burger.add_ingredient(mock_ingredient_2)
 
         expected_price = bun_price * 2 + 90 + 1337
-        expected_receipt = f"(==== {bun_name} ====)\n= sauce Соус Spicy-X =\n= filling Мясо бессмертных моллюсков Protostomia =\n(==== {bun_name} ====)\nPrice: {expected_price}"
+        expected_receipt = f"(==== {bun_name} ====)\n= sauce Соус Spicy-X =\n= filling Мясо бессмертных моллюсков Protostomia =\n(==== {bun_name} ====)\n\nPrice: {expected_price}"
         
         assert burger.get_receipt() == expected_receipt
 
@@ -304,12 +304,13 @@ class TestBurger:
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_receipt_actual_price_check(self, bun_name, bun_price, burger):
 
-        my_bun = Bun(bun_name, bun_price) 
-        burger.set_buns(my_bun)
-                
-        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
-        burger.add_ingredient(my_ingredient_1)
+        mock_bun = Mock()
+        mock_bun.get_price.return_value = bun_price
+        burger.set_buns(mock_bun)
 
+        mock_ingredient = Mock()
+        mock_ingredient.get_price.return_value = 90 
+        burger.add_ingredient(mock_ingredient)
 
         expected_price = bun_price * 2 + 90
         receipt = burger.get_receipt()
