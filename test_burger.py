@@ -127,5 +127,59 @@ class TestBurger:
 
 
 
+    def test_remove_ingredient_(self, burger):
+        
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
+
+        burger.add_ingredient(my_ingredient_1)
+        burger.add_ingredient(my_ingredient_2)
+
+        burger.remove_ingredient(my_ingredient_1)
+
+        assert len(burger.ingredients) == 1
+
+    
+    def test_move_ingredient_ingredient_forward(self, burger):
+
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
+        my_ingredient_3 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус с шипами Антарианского плоскоходца", 88)
+
+        burger.add_ingredient(my_ingredient_1)
+        burger.add_ingredient(my_ingredient_2)
+        burger.add_ingredient(my_ingredient_3)
+
+        burger.move_ingredient(0, 2)
+
+        assert burger.ingredients == [my_ingredient_2, my_ingredient_3, my_ingredient_1]
+
+    def test_move_ingredient_ingredient_backward(self, burger):
+    
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
+        my_ingredient_3 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус с шипами Антарианского плоскоходца", 88)
+        
+        burger.add_ingredient(my_ingredient_1)
+        burger.add_ingredient(my_ingredient_2)
+        burger.add_ingredient(my_ingredient_3)
+        
+        burger.move_ingredient(2, 0)
+        
+        assert burger.ingredients == [my_ingredient_3, my_ingredient_1, my_ingredient_2]
+
+    def test_move_ingredient_ingredient_same_position(self, burger):
+        
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
+        my_ingredient_3 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус с шипами Антарианского плоскоходца", 88)
+            
+        burger.add_ingredient(my_ingredient_1)
+        burger.add_ingredient(my_ingredient_2)
+        burger.add_ingredient(my_ingredient_3)
+            
+        burger.move_ingredient(0, 0)
+            
+        assert burger.ingredients == [my_ingredient_1, my_ingredient_2, my_ingredient_3]
 
     
