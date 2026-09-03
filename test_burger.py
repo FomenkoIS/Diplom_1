@@ -79,6 +79,7 @@ class TestBurger:
         burger.add_ingredient(my_ingredient)
 
         assert len(burger.ingredients) == 1
+        assert burger.ingredients[0] == my_ingredient
 
 
 
@@ -110,6 +111,21 @@ class TestBurger:
         burger.add_ingredient(my_ingredient)
         
         assert burger.ingredients[0].get_price() == price
+
+    def test_add_ingredient_add_two_ingrediets(self, burger):
+
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
+
+        burger.add_ingredient(my_ingredient_1)
+        burger.add_ingredient(my_ingredient_2)
+
+
+        assert len(burger.ingredients) == 2
+        assert burger.ingredients[0] == my_ingredient_1
+        assert burger.ingredients[1] == my_ingredient_2
+
+
 
 
     
