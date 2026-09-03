@@ -229,3 +229,61 @@ class TestBurger:
         actual_price = burger.get_price()
 
         assert expected_price == actual_price
+
+
+
+
+    def test_get_receipt_without_ingredients(self, bun_name, bun_price, burger):
+       
+        my_bun = Bun(bun_name, bun_price) 
+        burger.set_buns(my_bun)
+
+        expected_price = bun_price * 2
+        expected_receipt = f"(==== {bun_name} ====)\n(==== {bun_name} ====)\nPrice: {expected_price}"
+
+        assert burger.get_receipt() == expected_receipt
+
+
+    def test_get_receipt_with_one_ingredient(self, bun_name, bun_price, burger):
+        my_bun = Bun(bun_name, bun_price) 
+        burger.set_buns(my_bun)
+
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        burger.add_ingredient(my_ingredient_1)
+
+        expected_price = bun_price * 2 + 90
+        expected_receipt = f"(==== {bun_name} ====)\n= sauce Соус Spicy-X =\n(==== {bun_name} ====)\nPrice: {expected_price}"
+
+        assert burger.get_receipt() == expected_receipt
+
+
+
+    def test_get_receipt_with_multiple_ingredients(self, bun_name, bun_price, burger):
+
+        my_bun = Bun(bun_name, bun_price) 
+        burger.set_buns(my_bun)
+        
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
+        burger.add_ingredient(my_ingredient_1)
+        burger.add_ingredient(my_ingredient_2)
+        
+        expected_price = bun_price * 2 + 90 + 1337
+        expected_receipt = f"(==== {bun_name} ====)\n= sauce Соус Spicy-X =\n= filling Мясо бессмертных моллюсков Protostomia =\n(==== {bun_name} ====)\nPrice: {expected_price}"
+        
+        assert burger.get_receipt() == expected_receipt
+
+
+    def test_get_receipt_actual_price_check(self, bun_name, bun_price, burger):
+
+        my_bun = Bun(bun_name, bun_price) 
+        burger.set_buns(my_bun)
+                
+        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
+        burger.add_ingredient(my_ingredient_1)
+
+
+        expected_price = bun_price * 2 + 90
+        receipt = burger.get_receipt()
+
+        assert f"Price: {expected_price}" in receipt
