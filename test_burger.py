@@ -189,9 +189,11 @@ class TestBurger:
 
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_price_price_burger_without_ingredients(self, bun_name, bun_price, burger):
-        
-        my_bun = Bun(bun_name, bun_price) 
-        burger.set_buns(my_bun)
+
+        mock_bun = Mock()
+        mock_bun.get_price.return_value = bun_price
+
+        burger.set_buns(mock_bun)
 
         expected_price = bun_price * 2
         actual_price = burger.get_price()
@@ -201,12 +203,14 @@ class TestBurger:
 
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_price_burger_with_one_ingredient(self, bun_name, bun_price, burger):
-         
-        my_bun = Bun(bun_name, bun_price)
-        burger.set_buns(my_bun)
 
-        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
-        burger.add_ingredient(my_ingredient_1)
+        mock_bun = Mock()
+        mock_bun.get_price.return_value = bun_price
+        burger.set_buns(mock_bun)
+
+        mock_ingredient = Mock()
+        mock_ingredient.get_price.return_value = 90
+        burger.add_ingredient(mock_ingredient)
 
 
         expected_price = bun_price * 2 + 90
@@ -218,19 +222,22 @@ class TestBurger:
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_get_price_burger_with_multiple_ingredients(self, bun_name, bun_price, burger):
 
-        my_bun = Bun(bun_name, bun_price)
-        burger.set_buns(my_bun)
-        my_ingredient_1 = Ingredient(INGREDIENT_TYPE_SAUCE, "Соус Spicy-X", 90)
-        my_ingredient_2 = Ingredient(INGREDIENT_TYPE_FILLING, "Мясо бессмертных моллюсков Protostomia", 1337)
 
-        burger.add_ingredient(my_ingredient_1)
-        burger.add_ingredient(my_ingredient_2)
+        mock_bun = Mock()
+        mock_bun.get_price.return_value = bun_price 
+        burger.set_buns(mock_bun)
 
+        mock_ingredient_1 = Mock()
+        mock_ingredient_2 = Mock()
+        mock_ingredient_1.get_price.return_value = 90
+        mock_ingredient_2.get_price.return_value = 1337
+        burger.add_ingredient(mock_ingredient_1)
+        burger.add_ingredient(mock_ingredient_2)
+        
         expected_price = bun_price * 2 + 90 + 1337
         actual_price = burger.get_price()
 
         assert expected_price == actual_price
-
 
 
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
