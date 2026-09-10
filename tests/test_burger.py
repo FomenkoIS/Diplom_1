@@ -1,14 +1,12 @@
 import pytest
 from unittest.mock import Mock
 from praktikum.bun import Bun
-from praktikum.burger import Burger
 from praktikum.ingredient import Ingredient
 from praktikum.ingredient_types import INGREDIENT_TYPE_SAUCE, INGREDIENT_TYPE_FILLING
 from data import BUNS, INGREDIENT_TYPE_FILLING, ALL_INGREDIENTS
 
 
 class TestBurger:
-
 
     @pytest.mark.parametrize("bun_name, bun_price", BUNS)
     def test_set_buns_set_buns_correct(self, bun_name, bun_price, burger):
