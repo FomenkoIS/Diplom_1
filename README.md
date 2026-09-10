@@ -17,4 +17,4 @@
 
 Запуск тестов
 pip install -r requirements.txt
-python -m pytest test_burger.py -v
+pytest --cov=praktikum --cov-report=html
